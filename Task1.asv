@@ -1,0 +1,22 @@
+xValues = ones(1,99); % a place to store the result of each simulation
+yValues = ones(1,99); % a place to store the result of each simulation
+yCalcValues = ones(1,99); % a place to store the result of each simulation
+KValues = [1, 5, 15, 50, 100];
+for i = 1:5
+    K = KValues(i);
+    for j = 1:99
+        p = j/100; % prob of failure
+        xValues(j) = p;
+        yValues(j) = runSingleLinkSim(K, p, 1000);
+        yCalcValues(j) = K/((1-p));
+    end
+    figure(i);
+    disp(i);
+    plot(xValues, yValues, xValues, yCalcValues);
+    figure(6);
+    hold on;
+    plot(xValues, yValues, xValues, yCalcValues);
+end
+figure(6);
+hold off;
+% Goal: 6 plots. 5 -- 1 for each individual. 1 -- all the rest.

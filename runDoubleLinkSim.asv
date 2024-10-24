@@ -1,0 +1,55 @@
+%% Function runDoubleLinkSim()
+% Parameters
+%  K - the number of packets in the application message
+%  p - the probability of failure 
+%  N - the number of simulations to run
+%
+% Returns: the average numeric result across the total simulations
+
+function result = runDoubleLinkSim(K,p,N)
+
+    simResults = ones(1,N); % a place to store the result of each simulation
+    
+    for i=1:N
+        txAttemptCount = 0; % transmission count
+        pktSuccessCount = 0; % number of packets that have made it across
+    
+        while pktSuccessCount < K
+            
+            r = rand; % generate random number to determine if packet is successful (r > p)
+            txAttemptCount = txAttemptCount + 1; % count 1st attempt
+            hasSucceeded = false;
+
+            while hasSucceeded == false
+          
+                % while packet transmissions is not successful (r < p)
+                while r < p
+                    r = rand; % transmit again, generate new success check value r
+                    txAttemptCount = txAttemptCount + 1; % count additional attempt
+                    disp("hop 1 failed");
+                end
+    
+                % Yay, we made the first hop. Now it's do or die...
+    
+                r = rand; % Let's see if we can make the second hop.
+                txAttemptCount = txAttemptCount + 1; % count this attempt
+            
+                if r < p
+                    % We failed...
+                    r = rand; % reset the random number and start over.
+                    txAttemptCount = txAttemptCount + 1; % count additional attempt
+                    disp("hop 2 failed");
+                else
+                    hasSucceeded = true;
+                end
+
+            end
+            % disp("done: " + txAttemptCount);
+            pktSuccessCount = pktSuccessCount + 1; % increase success count after success (r > p)
+        end
+    
+        simResults(i) = txAttemptCount; % record total number of attempted transmissions before entire application message (K successful packets) transmitted
+    end
+
+    result = mean(simResults);
+end
