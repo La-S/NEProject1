@@ -1,6 +1,6 @@
-xValues = ones(1,99); % a place to store the result of each simulation
+xValues = ones(1,99); % a place to store the xValues (aka the 0.01 to 0.99).
 yValues = ones(1,99); % a place to store the result of each simulation
-yCalcValues = ones(1,99); % a place to store the result of each simulation
+yCalcValues = ones(1,99); % a place to store the result of each calculated point
 KValues = [1, 5, 15, 50, 100];
 Colors = ["r", "black", "g", "b", "m"];
 for i = 1:5
@@ -11,18 +11,26 @@ for i = 1:5
         yValues(j) = runCompoundNetworkSim(K, p, 1000);
         yCalcValues(j) = K / (( 1 - p * p) * (1-p));
     end
+
+    % Make the chart look good & draw to the individual graph
     figure(i);
+    title("K = " + K);
+    ylabel("# of Transmissions")
+    xlabel("% packets lost")
     set(gca,"YScale", "log");
+
     hold on
     plot(xValues, yValues, 'o', "Color", Colors(i));
     plot(xValues, yCalcValues, "Color", Colors(i));
     hold off
+
+    % Make the chart look good & draw to the combined graph
     figure(6);
+    set(gca,"YScale", "log");
+    ylabel("# of Transmissions")
+    xlabel("% packets lost")
+    title("All Values of K");
     hold on;
     plot(xValues, yValues, 'o', "Color", Colors(i));
     plot(xValues, yCalcValues, "Color", Colors(i));
 end
-figure(6);
-set(gca,"YScale", "log");
-hold off;
-% Goal: 6 plots. 5 -- 1 for each individual. 1 -- all the rest.

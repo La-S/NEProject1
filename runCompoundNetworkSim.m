@@ -8,7 +8,7 @@
 
 function result = runCompoundNetworkSim(K,p,N)
 
-        simResults = ones(1,N); % a place to store the result of each simulation
+    simResults = ones(1,N); % a place to store the result of each simulation
     
     for i=1:N
         txAttemptCount = 0; % transmission count
